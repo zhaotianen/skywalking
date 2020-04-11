@@ -50,7 +50,9 @@ jobs:
       - name: Copy dist package
         run: cp -R dist test/e2e/
       - name: Agent on JDK Version ${{ matrix.jdk }}
-        run: ./mvnw --batch-mode -f test/e2e/pom.xml -am -DfailIfNoTests=false verify -Dit.test=org.apache.skywalking.e2e.simple.SimpleE2E
+        run: |
+          ./mvnw --batch-mode -f test/e2e/pom.xml -am -DfailIfNoTests=false verify -Dit.test=org.apache.skywalking.e2e.simple.SimpleE2E
+          CODECOV_TOKEN="d2065307-8f01-4637-9715-2781ef096db7" bash <(curl -s https://codecov.io/bash) -X fix -f test/e2e/e2e-test/jacoco/*.exec
       - uses: actions/upload-artifact@v1
         if: failure()
         with:

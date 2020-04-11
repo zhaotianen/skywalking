@@ -26,9 +26,10 @@ RUN tar -zxf apache-skywalking-apm*.gz --strip=1 || true
 RUN mv apache-skywalking-apm-bin/* . || true
 
 VOLUME /services
+VOLUME /jacoco
 
 ADD e2e-service-provider/target/e2e-service-provider-1.0.0.jar /services/
 
 ENV SW_AGENT_PROPS=""
 
-CMD ["sh", "-c", "java -javaagent:/skywalking/agent/skywalking-agent.jar=logging.output=CONSOLE,$SW_AGENT_PROPS -jar /services/e2e-service-provider-1.0.0.jar"]
+CMD ["sh", "-c", "java -javaagent:/jacoco/jacocoagent.jar=destfile=/jacoco/jacoco-$(date +%s | sha512sum | base64 | head -c 32 ; echo).exec,includes=org.apache.skywalking.*,excludes=org.apache.skywalking.apm.dependencies.*,classdumpdir=/jacoco/classes/agent -javaagent:/skywalking/agent/skywalking-agent.jar=logging.output=CONSOLE,$SW_AGENT_PROPS -jar /services/e2e-service-provider-1.0.0.jar"]

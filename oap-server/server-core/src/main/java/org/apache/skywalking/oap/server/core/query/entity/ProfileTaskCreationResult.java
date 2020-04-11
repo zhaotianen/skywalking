@@ -16,7 +16,7 @@
  *
  */
 
-package org.apache.skywalking.oap.server.core.profile.entity;
+package org.apache.skywalking.oap.server.core.query.entity;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;

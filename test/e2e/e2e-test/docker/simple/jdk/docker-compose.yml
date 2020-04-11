@@ -24,6 +24,10 @@ services:
     networks:
       - e2e
     restart: on-failure
+    volumes:
+      - ../../../jacoco:/jacoco
+    environment:
+      - JAVA_OPTS=-javaagent:/jacoco/jacocoagent.jar=destfile=/jacoco/jacoco.exec,classdumpdir=/jacoco/classes/oap,includes=org.apache.skywalking.*,excludes=org.apache.skywalking.apm.dependencies.*:org.apache.skywalking.oap.query.*:org.apache.skywalking.oap.server.core.query.*
     healthcheck:
       test: ["CMD", "bash", "-c", "cat < /dev/null > /dev/tcp/127.0.0.1/11800"]
       interval: 5s
@@ -36,6 +40,8 @@ services:
       - 8080
     networks:
       - e2e
+    volumes:
+      - ../../../jacoco:/jacoco
     environment:
       - SW_OAP_ADDRESS=oap:12800
     depends_on:
@@ -52,6 +58,8 @@ services:
       - e2e
     expose:
       - 9090
+    volumes:
+      - ../../../jacoco:/jacoco
     environment:
       - SW_AGENT_COLLECTOR_BACKEND_SERVICES=oap:11800
     depends_on:
